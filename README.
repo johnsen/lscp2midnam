@@ -1,0 +1,81 @@
+////////////////////////////////////////////////////////////////////////////
+WARNING: This is a must for this script to work!
+////////////////////////////////////////////////////////////////////////////
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+////////////////////////////////////////////////////////////////////////////
+a. This script is dependant on every instrument being in it's own lscp file.
+b. This script will create a new bank for every .gig file it finds.
+////////////////////////////////////////////////////////////////////////////
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+////////////////////////////////////////////////////////////////////////////
+
+
+This script was designed to take .lscp created in Linuxsampler Fantasia
+Re-number as well as convert them to Rosegarden .rgd files 
+and Ardour3 compatible .midnam files
+
+The script creates a folder in your home directory called:
+
+~/.mconvert
+
+All files will be stored here once the script is done running
+
+
+NOTE: cd into WORKING_ON_MAPS and run the script from there to test it out
+********************************************************************************
+********************************************************************************
+
+
+1. DEPENDANCIES: 
+Rosegarden (you need a fresh autoload.rg, you might find it in /usr/share/apps/rosegarden or in your .kde home directory)
+XSLT
+Hans' XSL file to convert rgd xml to midnam xml
+
+
+********************************************************************************
+********************************************************************************
+
+
+2. Change these variables in the script to match your enviroment:
+
+RGLIBRARIAN="Christopher Cherrett"  #Used for rosegarden xml
+RGEMAIL="stuff@trackingsolutions.ca" #Used for the rosegarden xml
+RGCONF="${HOME}/.kde/share/apps/rosegarden/autoload.rg" #Personal config file. NOTE: We will NOT overwrite this file
+XSLTCONF="${HOME}/bin/rgd2midnam.xsl" #Path to the file used to convert rdg files to midnam
+
+
+********************************************************************************
+********************************************************************************
+
+
+3. Change the file: list_of_files to point to all the directories you want to convert
+
+
+********************************************************************************
+********************************************************************************
+
+
+4. to run the script:
+
+createDAWStudio.sh -S `cat list_of_files` -d LS_Single -f -o -m 1
+
+NOTE: this will create the following folders in each directory it finds samples in to convert:
+These directories are not the final files but left in place in case you want access to the files before we finalize the Studio Setup.
+
+LS_Single = all .lscp files with converted numbering
+LS_Master = stores the final .lscp file to setup your studio
+RG_MAPS = individual rosegarden .rgd files
+MIDNAM_MAPS = individual .midnam files 
+
+********************************************************************************
+********************************************************************************
+
+
+5. Creating Full Orchestral Setup
+
+Copy 1st Violins to 4 files and rename
+go into each file and edit the midi map name to reflect the name you want your ports to be called.
+
+
+********************************************************************************
+********************************************************************************
