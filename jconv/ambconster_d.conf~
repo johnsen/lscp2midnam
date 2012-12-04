@@ -1,0 +1,59 @@
+#  -----------------------------------------------------------------------------
+#
+#  Copyright (C) 2005-2007 Fons Adriaensen <fons@kokkinizita.net>
+#  
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#  -----------------------------------------------------------------------------
+#
+#
+# Jconv demo configuration
+# ------------------------
+#
+# The file 'chapel.wav' contains the reverb impulse response only,
+# not the direct sound. The correct way to use this in e.g. Ardour
+# is to use a post-fader send on the channels that need this reverb.
+# This way you can use a single reverb for any number of tracks,
+# and adjust the amount of reverb in function of the 'depth' or
+# 'distance' of each track.
+# The output can be connected directly to the Master module, or via
+# a stereo bus if you want to control the return gain (which should
+# not normally be necessary but can be handy).
+#
+# The required file 'chapel.wav' can be found at
+#
+#  http://www.kokkinizita.net/linuxaudio/downloads/chapel.wav
+#
+#
+# Replace by whatever required...
+#
+/cd /home/derick/linuxaudio/openoctave2/jconv
+#/cd /home/shares/SFZ_Performance_Set/Studio_Setup_Files/JCONV/reverbs
+#
+#                in  out   partition    maxsize
+# -----------------------------------------------
+/convolver/new    4    4         512      360000
+#
+#
+#               in out  gain  delay  offset  length  chan      file  
+# -----------------------------------------------------------------------------------
+/impulse/read    1   1   0.200    0       0    720     1    ambconst_48000.wav
+/impulse/read    2   2   0.200    0       0    720     2    ambconst_48000.wav
+/impulse/read	 3   3   0.200    720	  0    0       1    ambconst_48000.wav
+/impulse/read	 4   4   0.200    720     0    0       2    ambconst_48000.wav
+#
+#
+#
+
