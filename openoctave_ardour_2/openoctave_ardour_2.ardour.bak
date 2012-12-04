@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Session version="2.0.0" name="openoctave_ardour_2" sample-rate="44100" id-counter="2878">
+  <Config>
+    <Option name="output-auto-connect" value="2"/>
+    <Option name="input-auto-connect" value="1"/>
+    <Option name="mtc-port-name" value="control"/>
+    <Option name="mmc-port-name" value="control"/>
+    <Option name="midi-port-name" value="control"/>
+    <Option name="monitoring-model" value="1"/>
+    <Option name="meter-falloff" value="32"/>
+    <end-marker-is-free val="no"/>
+  </Config>
+  <Sources/>
+  <Regions/>
+  <DiskStreams>
+    <AudioDiskstream flags="Recordable" channels="1" playlist="tuba" speed="1" name="tuba" id="318"/>
+    <AudioDiskstream flags="Recordable" channels="1" playlist="trumpet2.1" speed="1" name="trumpet2" id="348"/>
+    <AudioDiskstream flags="Recordable" channels="1" playlist="trumpet1" speed="1" name="trumpet1" id="363"/>
+    <AudioDiskstream flags="Recordable" channels="1" playlist="violin" speed="1" name="violin" id="378"/>
+  </DiskStreams>
+  <Locations>
+    <Location id="1938" name="start" start="0" end="0" flags="IsMark,IsStart" locked="no"/>
+    <Location id="1939" name="end" start="13230000" end="13230000" flags="IsMark,IsEnd" locked="no"/>
+    <Location id="2208" name="Loop" start="0" end="13230000" flags="IsAutoLoop,IsHidden" locked="no"/>
+    <Location id="2209" name="Punch" start="0" end="13230000" flags="IsAutoPunch,IsHidden" locked="no"/>
+  </Locations>
+  <Connections/>
+  <Routes>
+    <Route flags="MasterOut" default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=0:signal=0">
+      <IO name="master" id="18" active="yes" inputs="{jconv ER/out 1,tubabus/out 1,trumpetbus/out 1,jconv Tail/out 1,violinbus/out 1}{jconv ER/out 2,tubabus/out 2,trumpetbus/out 2,jconv Tail/out 2,violinbus/out 2}" outputs="{system:playback_1}{system:playback_2}" gain="0.686435639858" iolimits="-1,2,-1,2">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="77" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="76"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="80" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="79"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="19"/>
+        <Automation>
+          <AutomationList id="1959" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="22"/>
+      <controllable name="mute" id="23"/>
+      <remote_control id="1"/>
+      <extra>
+        <GUI color="19882:10744:20811" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=1:signal=1">
+      <IO name="tubabus" id="283" active="yes" inputs="{tuba/out 1}{tuba/out 2}" outputs="{master/in 1}{master/in 2}" gain="0.985882639885" iolimits="-1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1534" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1533"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1537" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1536"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="284"/>
+        <Automation>
+          <AutomationList id="1971" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="287"/>
+      <controllable name="mute" id="288"/>
+      <remote_control id="2"/>
+      <Send bitslot="7">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 8" id="1022" active="yes" inputs="" outputs="{jconvolver:In-3}{jconvolver:In-4}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1542" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1541"/>
+              </StreamPanner>
+              <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1545" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1544"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1023"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="43743:8636:30205" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=2:signal=2">
+      <IO name="trumpetbus" id="292" active="yes" inputs="{trumpet2/out 1,trumpet1/out 1}{trumpet2/out 2,trumpet1/out 2}" outputs="{master/in 1}{master/in 2}" gain="0.979620873928" iolimits="-1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1520" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1519"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1523" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1522"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="293"/>
+        <Automation>
+          <AutomationList id="1983" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="296"/>
+      <controllable name="mute" id="297"/>
+      <remote_control id="3"/>
+      <Send bitslot="8">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 9" id="1032" active="yes" inputs="" outputs="{jconvolver:In-3}{jconvolver:In-4}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1528" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1527"/>
+              </StreamPanner>
+              <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1531" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1530"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1033"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="18089:35913:34255" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=3:signal=3" mode="Normal" diskstream-id="318">
+      <IO name="tuba" id="311" active="yes" inputs="{LinuxSampler0:1_tuba}" outputs="{tubabus/in 1}{tubabus/in 2}" gain="0.958058238029" iolimits="1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="323" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="322"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="312"/>
+        <Automation>
+          <AutomationList id="1995" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="315"/>
+      <controllable name="mute" id="316"/>
+      <remote_control id="4"/>
+      <Send bitslot="1">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 2" id="1049" active="yes" inputs="" outputs="{jconvolver:In-1}{jconvolver:In-2}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1055" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1054"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1050"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="5545:38088:9004" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+      <alignment style="CaptureTime"/>
+      <controllable name="recenable" id="2648"/>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=4:signal=4" mode="Normal" diskstream-id="348">
+      <IO name="trumpet2" id="341" active="yes" inputs="{LinuxSampler0:1_trumpet}" outputs="{trumpetbus/in 1}{trumpetbus/in 2}" gain="0.985882520676" iolimits="1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="353" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="352"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="342"/>
+        <Automation>
+          <AutomationList id="2015" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="345"/>
+      <controllable name="mute" id="346"/>
+      <remote_control id="5"/>
+      <Send bitslot="3">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 4" id="1063" active="yes" inputs="" outputs="{jconvolver:In-1}{jconvolver:In-2}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1069" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1068"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1064"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="22779:706:9408" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+      <alignment style="CaptureTime"/>
+      <controllable name="recenable" id="2658"/>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=5:signal=5" mode="Normal" diskstream-id="363">
+      <IO name="trumpet1" id="356" active="yes" inputs="{LinuxSampler0:1_trumpet}" outputs="{trumpetbus/in 1}{trumpetbus/in 2}" gain="0.947764873505" iolimits="1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="368" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="367"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="357"/>
+        <Automation>
+          <AutomationList id="2025" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="360"/>
+      <controllable name="mute" id="361"/>
+      <remote_control id="6"/>
+      <Send bitslot="4">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 5" id="1070" active="yes" inputs="" outputs="{jconvolver:In-1}{jconvolver:In-2}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1076" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1075"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1071"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="45848:44748:38109" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+      <alignment style="CaptureTime"/>
+      <controllable name="recenable" id="2668"/>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=6:signal=6" mode="Normal" diskstream-id="378">
+      <IO name="violin" id="371" active="yes" inputs="{LinuxSampler0:1_violin}" outputs="{violinbus/in 1}{violinbus/in 2}" gain="0.982374906540" iolimits="1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="383" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="382"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="372"/>
+        <Automation>
+          <AutomationList id="2035" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="375"/>
+      <controllable name="mute" id="376"/>
+      <remote_control id="7"/>
+      <Send bitslot="5">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 6" id="1077" active="yes" inputs="" outputs="{jconvolver:In-1}{jconvolver:In-2}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1083" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1082"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1078"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="12177:32820:37525" shown_mixer="yes" height="70" shown_editor="yes" strip_width="Wide">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+      <alignment style="CaptureTime"/>
+      <controllable name="recenable" id="2678"/>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=7:signal=7">
+      <IO name="jconv Tail" id="1094" active="yes" inputs="{jconvolver:Out-3}{jconvolver:Out-4}" outputs="{master/in 1}{master/in 2}" gain="0.648742318153" iolimits="-1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1170" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1169"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1173" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1172"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="1095"/>
+        <Automation>
+          <AutomationList id="2055" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="1098"/>
+      <controllable name="mute" id="1099"/>
+      <remote_control id="8"/>
+      <extra>
+        <GUI color="29473:10790:23365" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=8:signal=8">
+      <IO name="jconv ER" id="1103" active="yes" output-connection="Master Out" inputs="{jconvolver:Out-1}{jconvolver:Out-2}" gain="0.373645812273" iolimits="-1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1146" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1145"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1149" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1148"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="1104"/>
+        <Automation>
+          <AutomationList id="2067" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="1107"/>
+      <controllable name="mute" id="1108"/>
+      <remote_control id="9"/>
+      <extra>
+        <GUI color="33597:31376:27125" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+    <Route default-type="audio" muted="no" soloed="no" phase-invert="no" denormal-protection="no" mute-affects-pre-fader="no" mute-affects-post-fader="no" mute-affects-control-outs="no" mute-affects-main-outs="no" meter-point="MeterPostFader" order-keys="editor=9:signal=9">
+      <IO name="violinbus" id="1560" active="yes" inputs="{violin/out 1}{violin/out 2}" outputs="{master/in 1}{master/in 2}" gain="1.021434426308" iolimits="-1,-1,-1,-1">
+        <Panner linked="no" link_direction="SameDirection" bypassed="no">
+          <Output x="0" y="0"/>
+          <Output x="1" y="0"/>
+          <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1576" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1575"/>
+          </StreamPanner>
+          <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+            <Automation>
+              <AutomationList id="1579" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+            </Automation>
+            <controllable name="panner" id="1578"/>
+          </StreamPanner>
+        </Panner>
+        <controllable name="gaincontrol" id="1561"/>
+        <Automation>
+          <AutomationList id="2079" default="0" min_yval="0" max_yval="0" max_xval="0" state="Off" style="Absolute"/>
+        </Automation>
+      </IO>
+      <controllable name="solo" id="1564"/>
+      <controllable name="mute" id="1565"/>
+      <remote_control id="10"/>
+      <Send bitslot="0">
+        <Redirect active="yes" placement="PostFader">
+          <IO name="send 1" id="1582" active="yes" inputs="" outputs="{jconvolver:In-3}{jconvolver:In-4}" gain="1.000000000000" iolimits="-1,-1,-1,-1">
+            <Panner linked="no" link_direction="SameDirection" bypassed="no">
+              <Output x="0" y="0"/>
+              <Output x="1" y="0"/>
+              <StreamPanner x="0" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1588" default="0" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1587"/>
+              </StreamPanner>
+              <StreamPanner x="1" type="Equal Power Stereo" muted="no">
+                <Automation>
+                  <AutomationList id="1591" default="1" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+                </Automation>
+                <controllable name="panner" id="1590"/>
+              </StreamPanner>
+            </Panner>
+            <controllable name="gaincontrol" id="1583"/>
+            <Automation>
+              <Automation/>
+            </Automation>
+          </IO>
+          <Automation visible=""/>
+        </Redirect>
+      </Send>
+      <extra>
+        <GUI color="20969:41665:8572" strip_width="Wide" shown_mixer="yes" height="70" shown_editor="yes">
+          <gain shown="no" height="70"/>
+          <pan shown="no" height="70"/>
+        </GUI>
+      </extra>
+    </Route>
+  </Routes>
+  <EditGroups/>
+  <MixGroups/>
+  <Playlists/>
+  <UnusedPlaylists/>
+  <Click>
+    <IO name="click" id="24" active="yes" inputs="" outputs="{system:playback_1}{system:playback_2}" gain="1.000000000000" iolimits="0,0,-1,-1">
+      <Panner linked="no" link_direction="SameDirection" bypassed="no">
+        <Output x="0" y="0"/>
+        <Output x="1" y="0"/>
+        <StreamPanner x="0.5" type="Equal Power Stereo" muted="no">
+          <Automation>
+            <AutomationList id="74" default="0.5" min_yval="0" max_yval="1" max_xval="0" state="Off" style="Absolute"/>
+          </Automation>
+          <controllable name="panner" id="73"/>
+        </StreamPanner>
+      </Panner>
+      <controllable name="gaincontrol" id="25"/>
+      <Automation>
+        <AutomationList id="2091" default="1" min_yval="0" max_yval="2" max_xval="0" state="Off" style="Absolute"/>
+      </Automation>
+    </IO>
+  </Click>
+  <NamedSelections/>
+  <TempoMap>
+    <Tempo start="1|1|0" beats-per-minute="120.000000" note-type="4.000000" movable="no"/>
+    <Meter start="1|1|0" note-type="4.000000" beats-per-bar="4.000000" movable="no"/>
+  </TempoMap>
+  <ControlProtocols>
+    <Protocol name="Generic MIDI" feedback="0" feedback_interval="10000" active="yes">
+      <controls/>
+    </Protocol>
+    <Protocol name="Mackie" bank="0" active="yes"/>
+  </ControlProtocols>
+</Session>
