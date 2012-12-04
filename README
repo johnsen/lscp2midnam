@@ -1,3 +1,20 @@
 In this repo you find scripts to convert LSCP files to MIDNAM files.
 
-There is also backup stuff from the openoctave project from the time they made use of Rosegarden as sequencer (pre-muse2-period)
+There is also less interesting (personal) backup stuff from the openoctave project from the time they made use of Rosegarden as sequencer (pre-muse2-period)
+
+
+
+HOW THE SCRIPT WORKS
+
+
+* Read the README_scripts file!
+* make a folder where you put the createDAWStudio.sh script and the list_of_files in
+* make sure you've the  rgd2midnam.xsl and autoload.rg (~/.local/share/rosegarden/autoload/autoload.rg) on your system
+* make sure the createDAWStudio.sh points to the right mounting point(s) and the right paths for the needed files
+* make your midi mappings in several lscp files, using Fantasia GUI for Linuxsampler (see example FCH-AltoSax.lscp)
+* put your lscp files in a folder and put the path in the list_of_files file
+* See also the Final example lscp file in the repo
+
+see also:
+http://www.linuxmusicians.com/viewtopic.php?f=19&t=10335&p=33581#p33581
+
