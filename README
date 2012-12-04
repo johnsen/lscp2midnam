@@ -12,6 +12,7 @@ HOW THE SCRIPT WORKS
 * make sure you've the  rgd2midnam.xsl and autoload.rg (~/.local/share/rosegarden/autoload/autoload.rg) on your system
 * make sure the createDAWStudio.sh points to the right mounting point(s) and the right paths for the needed files
 * make your midi mappings in several lscp files, using Fantasia GUI for Linuxsampler (see example FCH-AltoSax.lscp)
+* export the midi mapping as midi mappings: Actions -> export -> midi instrument maps
 * put your lscp files in a folder and put the path in the list_of_files file
 * See also the Final example lscp file in the repo
 
