@@ -1,0 +1,396 @@
+#!/bin/bash
+#Licensed under the GPL
+#Authors: Alex Stone and Christopher Cherrett
+#OOStudio-v2 2009/08/25
+
+#TODO 
+#1. create a parmeter for passing a folder name that will contain the template files that you would like to load. Put it in ~/.oostudio.
+#we will need a .lscp, .rg, jackmix, jconv file in the template folder created by the user
+#
+#2. allow for the killing and loading based on greping the ids based on the users machine. 
+
+usage() {
+	echo -e "OOStudio Script for starting your Open Octave Studio\n"
+	echo -e "\t./OOStudio (optional -m to start up in mix mode with no ardour)"
+}
+
+#if [[ $# -lt 2 ]]; then
+#	usage
+#	exit 1
+#elif [[ "$1" = "-h" ]]; then
+if [[ "$1" = "-h" ]]; then
+	usage
+	exit 0
+fi
+
+MIX="false";
+
+while getopts ":m" opts
+do
+	case $opts in
+		m) 
+		MIX="true";
+		break ;;
+	esac
+done
+
+trap ctrl_c INT
+
+function killprocesses()
+{
+	echo "Stopping Open Octave Studio ......"
+	
+	if [[ "$MIX" == "false" ]]; then
+		#ardour kills by specific version numbers
+		#we need to grep for ardour in the process list and get the process id to kill
+		#ps ax | grep ardour
+		#killall /usr/local/lib64/ardour2/ardour-2.8
+		sleep 2
+	else
+    		killall jackmix
+		sleep 2
+    		killall jkmeter
+		sleep 2
+	fi
+    
+	#killall openoctave
+	#sleep 5
+	#killall openoctavesequencer
+	#sleep 5	
+	killall jconv
+	sleep 2
+	killall linuxsampler
+	sleep 2
+	killall a2jmidid
+	sleep 2
+	killall jackd
+	sleep 2
+}
+
+function ctrl_c()
+{
+	killprocesses
+	exit
+}
+function start_a2j()
+{
+	a2jmidid &
+}
+function jack_disconnect_all()
+{
+	echo "looking for $1"
+	DESTPORT=`jack_lsp -c | grep -A 1 -e "^$1" | tail -n1 | colrm 1 3`
+	echo "DESTPORT = $DESTPORT"
+	while [ -n "$DESTPORT" ]; do
+		echo "disconnecting $DESTPORT"
+		jack_disconnect "$1" "$DESTPORT" || exit
+		DESTPORT=`jack_lsp -c | grep -B 1 -e "^$1" | head -n1 | colrm 1 3` 
+	done
+}
+
+function startup()
+{
+	echo "running initial cleanup"
+	killprocesses
+}
+
+#jack_disconnect_all "hello"
+startup
+
+echo "Starting Open Octave Studio ......"
+
+#/usr/bin/jackd -R -P89 -p512 -m -dalsa -dhw:0,0 -r44100 -p64 -n3 -D -Phw:0,0 -s -i12 -o10 -Xseq &
+/usr/bin/jackd -R -P89 -p2048 -t2000 -dalsa -dhw:0 -r44100 -p512 -n3 -P &
+sleep 5
+
+#start_a2j
+#sleep 5
+
+/usr/bin/linuxsampler &
+sleep 5
+
+cat /home/chris/Drive3/Studio_Setup_Files/mono_full_orchestra_studio/LS_Studio_Final.lscp | nc localhost 8888 &
+#cat /home/chris/Drive3/Studio_Setup_Files/LSCP/LS_Studio_Final.lscp | nc localhost 8888 &
+#cat /home/alex/templates1/alex_studio/LS_Studio_Final_mono.lscp | nc localhost 8888 &
+sleep 25
+
+#/usr/kde/3.5/bin/openoctave /home/alex/templates1/alex_studio/default44120.rg &
+/usr/kde/3.5/bin/openoctave &
+sleep 15
+
+/usr/bin/jconv /home/chris/Drive3/Studio_Setup_Files/JCONV/ambconster.conf &
+#/usr/bin/jconv /home/alex/ir/greathall.conf &
+sleep 12
+
+if [[ "$MIX" == "false" ]]; then
+	/usr/bin/ardour2 &
+	sleep 10
+else
+	#/usr/bin/jackmix /home/alex/audio-projects/jackmixdraft1.jm-xml  &
+	/usr/bin/jackmix &
+	sleep 2
+	/usr/bin/jkmeter &
+	sleep 2
+fi
+
+
+if [[ "$MIX" == "true" ]]; then
+	jack_connect LinuxSampler0:0_1st_violins "JackMix:1st violins"
+	jack_connect LinuxSampler1:0_2nd_violins "JackMix:2nd violins"
+	jack_connect LinuxSampler0:1_cellos JackMix:cellos
+	jack_connect LinuxSampler1:2_violas JackMix:violas
+	jack_connect LinuxSampler1:1_basses JackMix:basses
+	jack_connect LinuxSampler1:3_piccolo JackMix:flutes
+	jack_connect LinuxSampler1:4_flute_1 JackMix:flutes
+	jack_connect LinuxSampler1:5_flute_2 JackMix:flutes
+	jack_connect LinuxSampler1:6_alto_flute JackMix:flutes
+	jack_connect LinuxSampler0:13_oboe_1 JackMix:oboes
+	jack_connect LinuxSampler0:14_oboe_2 JackMix:oboes
+	jack_connect LinuxSampler0:15_english_horn JackMix:oboes
+	jack_connect LinuxSampler0:10_clarinet_1 JackMix:clarinets
+	jack_connect LinuxSampler0:11_clarinet_2 JackMix:clarinets
+	jack_connect LinuxSampler0:12_bass_clarinet JackMix:clarinets
+	jack_connect LinuxSampler0:7_bassoon_1 JackMix:bassoons
+	jack_connect LinuxSampler0:8_bassoon_2 JackMix:bassoons
+	jack_connect LinuxSampler0:9_contrabassoon JackMix:bassoons
+	jack_connect LinuxSampler1:7_horn_1 JackMix:horns
+	jack_connect LinuxSampler1:8_horn_2 JackMix:horns
+	jack_connect LinuxSampler0:19_trumpet_1 JackMix:trumpets
+	jack_connect LinuxSampler0:20_trumpet_2 JackMix:trumpets
+	jack_connect LinuxSampler0:16_trombone_1 JackMix:trombones
+	jack_connect LinuxSampler0:17_trombone_2 JackMix:trombones
+	jack_connect LinuxSampler0:18_bass_trombone JackMix:trombones
+	jack_connect LinuxSampler0:21_tuba JackMix:tuba
+	jack_connect LinuxSampler0:26_euphonium JackMix:tuba
+	jack_connect LinuxSampler1:15_tympani JackMix:tympani
+	jack_connect LinuxSampler1:11_percussion_1 JackMix:percussion
+	jack_connect LinuxSampler1:12_percussion_2 JackMix:percussion
+	jack_connect LinuxSampler1:13_pitched_perc_1 JackMix:percussion
+	jack_connect LinuxSampler1:14_pitched_perc_2 JackMix:percussion
+	jack_connect LinuxSampler0:2_harps JackMix:harppiano
+	jack_connect LinuxSampler0:22_piano JackMix:harppiano
+	jack_connect LinuxSampler1:16_male_choir JackMix:choir
+	jack_connect LinuxSampler0:24_femalechoir JackMix:choir
+	jack_connect LinuxSampler1:17_mixed_choir JackMix:choir
+	jack_connect LinuxSampler0:23_fxchoir JackMix:choir
+	jack_connect LinuxSampler0:6_solo_violin JackMix:solo
+	jack_connect LinuxSampler0:5_solo_viola JackMix:solo
+	jack_connect LinuxSampler0:4_solo_cello JackMix:solo
+	jack_connect LinuxSampler0:3_solo_bass JackMix:solo
+	jack_connect LinuxSampler1:9_organ_1 JackMix:orgauxeast
+	jack_connect LinuxSampler1:10_organ_2 JackMix:orgauxeast
+	jack_connect LinuxSampler0:"27_1st violins_b" "JackMix:1st violins"
+	jack_connect LinuxSampler0:"28_1st violins_c" "JackMix:1st violins"
+	jack_connect LinuxSampler1:19_2nd_violins_b "JackMix:2nd violins"
+	jack_connect LinuxSampler1:20_2nd_violins_c "JackMix:2nd violins"
+	jack_connect LinuxSampler1:21_violas_b JackMix:violas
+	jack_connect LinuxSampler1:22_violas_c JackMix:violas
+	jack_connect LinuxSampler0:29_cellos_b JackMix:cellos
+	jack_connect LinuxSampler0:30_cellos_c JackMix:cellos
+	jack_connect LinuxSampler1:23_basses_b JackMix:basses
+	jack_connect LinuxSampler1:24_basses_c JackMix:basses
+	jack_connect LinuxSampler0:25_auxilary JackMix:orgauxeast
+	jack_connect LinuxSampler1:18_eastern JackMix:orgauxeast
+	jack_connect JackMix:out_1 system:playback_1
+	jack_connect JackMix:out_1 system:playback_3
+	jack_connect JackMix:out_2 system:playback_2
+	jack_connect JackMix:out_2 system:playback_4
+	jack_connect JackMix:JCONV jconv:In-1
+	jack_connect JackMix:JCONV1 jconv:In-2 
+	jack_connect jconv:Out-1 system:playback_1
+	jack_connect jconv:Out-1 system:playback_3
+	jack_connect jconv:Out-2 system:playback_2
+	jack_connect jconv:Out-2 system:playback_4
+	jack_connect JackMix:out_1 jkmeter:in-1
+	jack_connect JackMix:out_2 jkmeter:in-2
+	jack_connect jconv:Out-1 jkmeter:in-1
+	jack_connect jconv:Out-2 jkmeter:in-2
+fi
+
+sleep 6
+
+#debug="false"
+#if [[ "$debug" == "false" ]]; then
+
+function my_ports()
+{
+
+jack_disconnect "openoctave:master out L" system:playback_1
+jack_disconnect "openoctave:master out R" system:playback_2
+#jack_disconnect_all "a2j:ardour (capture): control"
+#jack_disconnect_all "a2j:ardour (capture): mcu"
+#jack_disconnect_all "a2j:ardour (capture): seq"
+#We need to grep out the alsa identifier numbers for openoctave and the sound card with:
+#aconnect -o | grep openoctave
+#for the following command we need to pass a parameter to identify the card with a grep command. like passing M Audio for the grep
+#aconnect -o | grep card?????
+#then use something like sed to get the 2nd value and stor it to pass to aconnect
+#so something like:
+#aconnect $alsa_id_card:0 $alsa_id_openoctave:0 
+#aconnect 16:0 132:0
+
+jack_connect 'a2j:openoctave (capture): out 1 - 00_String_ensemble-1' LSJPort0:00Stringensemble-1
+jack_connect 'a2j:openoctave (capture): out 2 - 00_String_ensemble-2' LSJPort0:00Stringensemble-2
+jack_connect 'a2j:openoctave (capture): out 3 - 01_1st-Violin_ensemble_14-1' LSJPort0:011stViolinensemble-14-1
+jack_connect 'a2j:openoctave (capture): out 4 - 01_1st-Violin_ensemble_14-2' LSJPort0:011stViolinensemble-14-2
+jack_connect 'a2j:openoctave (capture): out 5 - 01_1st-Violin_ensemble_14-3' LSJPort0:011stViolinensemble-14-3
+jack_connect 'a2j:openoctave (capture): out 6 - 01_1st-Violin_ensemble_14-4' LSJPort0:011stViolinensemble-14-4
+jack_connect 'a2j:openoctave (capture): out 7 - 01_2nd-Violin_ensemble_14-1' LSJPort1:012ndViolinensemble-14-1 
+jack_connect 'a2j:openoctave (capture): out 8 - 01_2nd-Violin_ensemble_14-2' LSJPort1:012ndViolinensemble-14-2
+jack_connect 'a2j:openoctave (capture): out 9 - 01_2nd-Violin_ensemble_14-3' LSJPort1:012ndViolinensemble-14-3
+jack_connect 'a2j:openoctave (capture): out 10 - 01_2nd-Violin_ensemble_14-4' LSJPort1:012ndViolinensemble-14-4
+jack_connect 'a2j:openoctave (capture): out 11 - 02_Viola_ensemble_10-1' LSJPort1:02Violaensemble-10-1
+jack_connect 'a2j:openoctave (capture): out 12 - 02_Viola_ensemble_10-2' LSJPort1:02Violaensemble-10-2
+jack_connect 'a2j:openoctave (capture): out 13 - 02_Viola_ensemble_10-3' LSJPort1:02Violaensemble-10-3
+jack_connect 'a2j:openoctave (capture): out 14 - 02_Viola_ensemble_10-4' LSJPort1:02Violaensemble-10-4
+jack_connect 'a2j:openoctave (capture): out 15 - 03_Cello_ensemble_8-1' LSJPort0:03Celloensemble-8-1
+jack_connect 'a2j:openoctave (capture): out 16 - 03_Cello_ensemble_8-2' LSJPort0:03Celloensemble-8-2
+jack_connect 'a2j:openoctave (capture): out 17 - 03_Cello_ensemble_8-3' LSJPort0:03Celloensemble-8-3
+jack_connect 'a2j:openoctave (capture): out 18 - 03_Cello_ensemble_8-4' LSJPort0:03Celloensemble-8-4
+jack_connect 'a2j:openoctave (capture): out 19 - 04_Double_bass_ensemble_6-1' LSJPort0:04Doublebassensemble-6-1
+jack_connect 'a2j:openoctave (capture): out 20 - 04_Double_bass_ensemble_6-2' LSJPort0:04Doublebassensemble-6-2
+jack_connect 'a2j:openoctave (capture): out 21 - 04_Double_bass_ensemble_6-3' LSJPort0:04Doublebassensemble-6-3
+jack_connect 'a2j:openoctave (capture): out 22 - 04_Double_bass_ensemble_6-4' LSJPort0:04Doublebassensemble-6-4
+jack_connect 'a2j:openoctave (capture): out 23 - 05_Solo_1st-Violin-1' LSJPort0:05Solo1stViolin-1
+jack_connect 'a2j:openoctave (capture): out 24 - 05_Solo_1st-Violin-2' LSJPort0:05Solo1stViolin-2
+jack_connect 'a2j:openoctave (capture): out 25 - 05_Solo_1st-Violin-3' LSJPort0:05Solo1stViolin-3
+jack_connect 'a2j:openoctave (capture): out 26 - 05_Solo_1st-Violin-4' LSJPort0:05Solo1stViolin-4
+jack_connect 'a2j:openoctave (capture): out 27 - 05_Solo_2nd-Violin-1' LSJPort1:05Solo2ndViolin-1 
+jack_connect 'a2j:openoctave (capture): out 28 - 05_Solo_2nd-Violin-2' LSJPort1:05Solo2ndViolin-2
+jack_connect 'a2j:openoctave (capture): out 29 - 05_Solo_2nd-Violin-3' LSJPort1:05Solo2ndViolin-3
+jack_connect 'a2j:openoctave (capture): out 30 - 05_Solo_2nd-Violin-4' LSJPort1:05Solo2ndViolin-4
+jack_connect 'a2j:openoctave (capture): out 31 - 06_Solo_Cello-1' LSJPort0:06Solocello-1
+jack_connect 'a2j:openoctave (capture): out 32 - 06_Solo_Cello-2' LSJPort0:06Solocello-2
+jack_connect 'a2j:openoctave (capture): out 33 - 06_Solo_Cello-3' LSJPort0:06Solocello-3
+jack_connect 'a2j:openoctave (capture): out 34 - 06_Solo_Cello-4' LSJPort0:06Solocello-4
+jack_connect 'a2j:openoctave (capture): out 35 - 10_Harp-1' LSJPort0:10Harp-1
+jack_connect 'a2j:openoctave (capture): out 36 - 10_Harp-2' LSJPort0:10Harp-2
+jack_connect 'a2j:openoctave (capture): out 37 - 11_Piccolo_1st_flute' LSJPort1:11Piccolo1stflute
+jack_connect 'a2j:openoctave (capture): out 38 - 11_Piccolo_2nd_flute' LSJPort0:11Piccolo2ndflute
+jack_connect 'a2j:openoctave (capture): out 39 - 12_1st_Flute-1' LSJPort1:121stFlute-1
+jack_connect 'a2j:openoctave (capture): out 40 - 12_2nd_Flute-1' LSJPort0:122ndFlute-1
+jack_connect 'a2j:openoctave (capture): out 41 - 13_1st_Flute-2' LSJPort1:131stFlute-2
+jack_connect 'a2j:openoctave (capture): out 42 - 13_2nd_Flute-2' LSJPort0:132ndFlute-2
+jack_connect 'a2j:openoctave (capture): out 43 - 14_Alto_1st_flute' LSJPort1:14Alto1stflute
+jack_connect 'a2j:openoctave (capture): out 44 - 14_Alto_2nd_flute' LSJPort0:14Alto2ndflute
+jack_connect 'a2j:openoctave (capture): out 45 - 15_Oboe-1' LSJPort0:15Oboe-1
+jack_connect 'a2j:openoctave (capture): out 46 - 15_Oboe-2' LSJPort0:15Oboe-2
+jack_connect 'a2j:openoctave (capture): out 47 - 16_English_horn-1' LSJPort1:16Englishhorn-1
+jack_connect 'a2j:openoctave (capture): out 48 - 16_English_horn-2' LSJPort1:16Englishhorn-2
+jack_connect 'a2j:openoctave (capture): out 49 - 18_Clarinet_Bb-1' LSJPort1:18Clarinet-Bb-1
+jack_connect 'a2j:openoctave (capture): out 50 - 18_Clarinet_Bb-2' LSJPort1:18Clarinet-Bb-2
+jack_connect 'a2j:openoctave (capture): out 51 - 19_Bass_clarinet-1' LSJPort1:19Bassclarinet-1
+jack_connect 'a2j:openoctave (capture): out 52 - 19_Bass_clarinet-2' LSJPort1:19Bassclarinet-2
+jack_connect 'a2j:openoctave (capture): out 53 - 20_Bassoon-1' LSJPort1:20Bassoon-1
+jack_connect 'a2j:openoctave (capture): out 54 - 20_Bassoon-2' LSJPort1:20Bassoon-2
+jack_connect 'a2j:openoctave (capture): out 55 - 21_Contra_bassoon-1' LSJPort1:21Contrabassoon-1
+jack_connect 'a2j:openoctave (capture): out 56 - 21_Contra_bassoon-2' LSJPort1:21Contrabassoon-2
+jack_connect 'a2j:openoctave (capture): out 57 - 22_Piccolo_trumpet-1' LSJPort1:22Piccolotrumpet-1
+jack_connect 'a2j:openoctave (capture): out 58 - 22_Piccolo_trumpet-2' LSJPort1:22Piccolotrumpet-2
+jack_connect 'a2j:openoctave (capture): out 59 - 23_Trumpet_C-1' LSJPort1:23Trumpet-C-1
+jack_connect 'a2j:openoctave (capture): out 60 - 23_Trumpet_C-2' LSJPort1:23Trumpet-C-2
+jack_connect 'a2j:openoctave (capture): out 61 - 24_Bass_trumpet-1' LSJPort1:24Basstrumpet-1
+jack_connect 'a2j:openoctave (capture): out 62 - 24_Bass_trumpet-2' LSJPort1:24Basstrumpet-2
+jack_connect 'a2j:openoctave (capture): out 63 - 25_Trumpet_ensemble_3-1' LSJPort1:25Trumpetensemble-3-1
+jack_connect 'a2j:openoctave (capture): out 64 - 25_Trumpet_ensemble_3-2' LSJPort1:25Trumpetensemble-3-2
+jack_connect 'a2j:openoctave (capture): out 65 - 26_Horn-1' LSJPort1:26Horn-1
+jack_connect 'a2j:openoctave (capture): out 66 - 26_Horn-2' LSJPort1:26Horn-2
+jack_connect 'a2j:openoctave (capture): out 67 - 27_Horn_ensemble_4-1' LSJPort1:27Hornensemble-4-1
+jack_connect 'a2j:openoctave (capture): out 68 - 27_Horn_ensemble_4-2' LSJPort1:27Hornensemble-4-2
+jack_connect 'a2j:openoctave (capture): out 69 - 28_Tenor_trombone-1' LSJPort0:28Tenortrombone-1
+jack_connect 'a2j:openoctave (capture): out 70 - 28_Tenor_trombone-2' LSJPort0:28Tenortrombone-2
+jack_connect 'a2j:openoctave (capture): out 71 - 29_Bass_trombone-1' LSJPort0:29Basstrombone-1
+jack_connect 'a2j:openoctave (capture): out 72 - 29_Bass_trombone-2' LSJPort0:29Basstrombone-2
+jack_connect 'a2j:openoctave (capture): out 73 - 30_Contrabass_trombone-1' LSJPort0:30Contrabasstrombone-1
+jack_connect 'a2j:openoctave (capture): out 74 - 30_Contrabass_trombone-2' LSJPort0:30Contrabasstrombone-2
+jack_connect 'a2j:openoctave (capture): out 75 - 31_Trombone_ensemble_3-1' LSJPort0:31Tromboneensemble-3-1
+jack_connect 'a2j:openoctave (capture): out 76 - 31_Trombone_ensemble_3-2' LSJPort0:31Tromboneensemble-3-2
+jack_connect 'a2j:openoctave (capture): out 77 - 32_Tuba-1' LSJPort0:32Tuba-1
+jack_connect 'a2j:openoctave (capture): out 78 - 32_Tuba-2' LSJPort0:32Tuba-2
+jack_connect 'a2j:openoctave (capture): out 79 - 33_Contrabass_tuba-1' LSJPort0:33Contrabasstuba-1
+jack_connect 'a2j:openoctave (capture): out 80 - 33_Contrabass_tuba-2' LSJPort0:33Contrabasstuba-2
+jack_connect 'a2j:openoctave (capture): out 81 - 34_Wagner_tuba-1' LSJPort0:34Wagnertuba-1
+jack_connect 'a2j:openoctave (capture): out 82 - 34_Wagner_tuba-2' LSJPort0:34Wagnertuba-2
+jack_connect 'a2j:openoctave (capture): out 83 - 35_Cimbasso-1' LSJPort0:35Cimbasso-1
+jack_connect 'a2j:openoctave (capture): out 84 - 35_Cimbasso-2' LSJPort0:35Cimbasso-2
+jack_connect 'a2j:openoctave (capture): out 85 - 36_Timpani-1' LSJPort2:36Timpani-1 
+jack_connect 'a2j:openoctave (capture): out 86 - 36_Timpani-2' LSJPort2:36Timpani-2
+jack_connect 'a2j:openoctave (capture): out 87 - 37A_Drums-1' LSJPort2:37ADrums-1
+jack_connect 'a2j:openoctave (capture): out 88 - 37A_Drums-2' LSJPort2:37ADrums-2
+jack_connect 'a2j:openoctave (capture): out 89 - 38B_Cymbals_and_Gongs-1' LSJPort2:38BCymbalsandGongs-1
+jack_connect 'a2j:openoctave (capture): out 90 - 38B_Cymbals_and_Gongs-2' LSJPort2:38BCymbalsandGongs-2
+jack_connect 'a2j:openoctave (capture): out 91 - 39C_Mallets_and_Blocks-1' LSJPort2:39CMalletsandBlocks-1
+jack_connect 'a2j:openoctave (capture): out 92 - 39C_Mallets_and_Blocks-2' LSJPort2:39CMalletsandBlocks-2
+jack_connect 'a2j:openoctave (capture): out 93 - 40D_Bells-1' LSJPort2:40DBells-1
+jack_connect 'a2j:openoctave (capture): out 94 - 40D_Bells-2' LSJPort2:40DBells-2
+jack_connect 'a2j:openoctave (capture): out 95 - 41E_FX_Percussion-1' LSJPort2:FX_Percussion.lscp-1
+jack_connect 'a2j:openoctave (capture): out 96 - 41E_FX_Percussion-2' LSJPort2:FX_Percussion.lscp-2
+jack_connect 'a2j:openoctave (capture): out 97 - 41E_Percussion-1' LSJPort2:41EPercussion-1
+jack_connect 'a2j:openoctave (capture): out 98 - 41E_Percussion-2' LSJPort2:41EPercussion-2
+jack_connect 'a2j:openoctave (capture): out 99 - 42_Percussion_Basic-Sets-1' LSJPort2:42PercussionBasic-Sets-1
+jack_connect 'a2j:openoctave (capture): out 100 - 42_Percussion_Basic-Sets-2' LSJPort2:42PercussionBasic-Sets-2
+jack_connect 'a2j:openoctave (capture): out 101 - Sam_TS1_Close-1' LSJPort2:Sam_TS1_Close-1
+jack_connect 'a2j:openoctave (capture): out 102 - Sam_TS1_Close-2' LSJPort2:Sam_TS1_Close-2
+jack_connect 'a2j:openoctave (capture): out 103 - Sam_TS1_Close-3' LSJPort2:Sam_TS1_Close-3
+jack_connect 'a2j:openoctave (capture): out 104 - Sam_TS1_Far-1' LSJPort2:Sam_TS1_Far-1
+jack_connect 'a2j:openoctave (capture): out 105 - Sam_TS1_Far-2' LSJPort2:Sam_TS1_Far-2
+jack_connect 'a2j:openoctave (capture): out 106 - Sam_TS1_Far-3' LSJPort2:Sam_TS1_Far-3
+jack_connect 'a2j:openoctave (capture): out 107 - Sam_TS1_Stage-1' LSJPort2:Sam_TS1_Stage-1
+jack_connect 'a2j:openoctave (capture): out 108 - Sam_TS1_Stage-2' LSJPort2:Sam_TS1_Stage-2
+jack_connect 'a2j:openoctave (capture): out 109 - Sam_TS1_Stage-3' LSJPort2:Sam_TS1_Stage-3
+jack_connect 'a2j:openoctave (capture): out 110 - Sam_TS2_Close-1' LSJPort2:Sam_TS1_Close-1
+jack_connect 'a2j:openoctave (capture): out 111 - Sam_TS2_Close-2' LSJPort2:Sam_TS2_Close-2
+jack_connect 'a2j:openoctave (capture): out 112 - Sam_TS2_Close-3' LSJPort2:Sam_TS2_Close-3
+jack_connect 'a2j:openoctave (capture): out 113 - Sam_TS2_Menu-1' LSJPort2:Sam_TS2_Menu-1
+jack_connect 'a2j:openoctave (capture): out 114 - Sam_TS2_Menu-2' LSJPort2:Sam_TS2_Menu-2
+jack_connect 'a2j:openoctave (capture): out 115 - Sam_TS2_Menu-3' LSJPort2:Sam_TS2_Menu-3
+jack_connect 'a2j:openoctave (capture): out 116 - Sam_TS2_Room-1' LSJPort2:Sam_TS2_Room-1
+jack_connect 'a2j:openoctave (capture): out 117 - Sam_TS2_Room-2' LSJPort2:Sam_TS2_Room-2
+jack_connect 'a2j:openoctave (capture): out 118 - Sam_TS2_Room-3' LSJPort2:Sam_TS2_Room-3
+jack_connect 'a2j:openoctave (capture): out 119 - Sam_TS2_Stage-1' LSJPort2:Sam_TS2_Stage-1
+jack_connect 'a2j:openoctave (capture): out 120 - Sam_TS2_Stage-2' LSJPort2:Sam_TS2_Stage-2
+jack_connect 'a2j:openoctave (capture): out 121 - Sam_TS2_Stage-3' LSJPort2:Sam_TS2_Stage-3
+jack_connect 'a2j:openoctave (capture): out 122 - GigaPianos-1' LSJPort2:GigaPianos-1
+jack_connect 'a2j:openoctave (capture): out 123 - GigaPianos-2' LSJPort2:GigaPianos-2
+jack_connect 'a2j:openoctave (capture): out 124 - GigaPianos-3' LSJPort2:GigaPianos-3
+jack_connect 'a2j:openoctave (capture): out 125 - MegaPianos-1' LSJPort2:MegaPianos-1
+jack_connect 'a2j:openoctave (capture): out 126 - MegaPianos-2' LSJPort2:MegaPianos-2
+jack_connect 'a2j:openoctave (capture): out 127 - MegaPianos-3' LSJPort2:MegaPianos-3
+#jack_connect 'a2j:M Audio Audiophile 24/96 (capture): M Audio Audiophile 24/96 MI' 'a2j:openoctave (playback): record in'
+}
+
+#a2jmidid -e &
+start_a2j
+sleep 5
+my_ports
+sleep 5
+
+# disconnect all alsa ports
+aconnect -x
+#attach the keyboard
+aconnect 'M Audio Audiophile 24/96:M Audio Audiophile 24/96 MIDI' 'openoctave:record in'
+#fi
+
+
+echo "To stop the Open Octave Studio press CTRL + C"
+
+for (( ; ; ))
+do
+	sleep 10
+	#sleep 100000
+	aconnect 'M Audio Audiophile 24/96:M Audio Audiophile 24/96 MIDI' 'openoctave:record in'
+	a2j_running=`ps ax | grep "[a]2jmidid"`
+	echo "a2j_running = $a2j_running"
+	if [[ -z $a2j_running ]]; then
+		echo "starting a2j"
+		aconnect -x
+		sleep 2
+		#aconnect 'M Audio Audiophile 24/96:M Audio Audiophile 24/96 MIDI' 'openoctave:record in'
+		#sleep 2
+		start_a2j
+		sleep 5
+		my_ports
+		sleep 2
+	fi
+done
+
